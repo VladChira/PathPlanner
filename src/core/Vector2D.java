@@ -7,7 +7,8 @@ public class Vector2D implements Serializable {
     public double y;
 
     public Vector2D() {
-
+        x = 0.0;
+        y = 0.0;
     }
 
     public Vector2D(final double x, final double y) {
@@ -23,6 +24,10 @@ public class Vector2D implements Serializable {
 
     public Vector2D copy() {
         return new Vector2D(this.x, this.y);
+    }
+
+    public static double dot(final Vector2D v1, final  Vector2D v2) {
+        return v1.x * v2.x + v1.y * v2.y;
     }
 
     public double mag() {

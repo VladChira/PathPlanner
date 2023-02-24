@@ -13,7 +13,6 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
         Scene scene = new Scene(root);
 
-
         stage.setTitle("Vlad's Path Planner");
         stage.setWidth(1200);
         stage.setHeight(700);

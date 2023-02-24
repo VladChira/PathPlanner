@@ -2,10 +2,15 @@ package GUI;
 
 import core.RDP;
 import core.Vector2D;
+import core.Path;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 
@@ -13,6 +18,8 @@ public class Controller {
 
     public static ArrayList<Vector2D> drawnCurve = new ArrayList<>();
     public static ArrayList<Vector2D> RDPCurve = new ArrayList<>();
+    public static Path path = null;
+    public static boolean curveIsAvailable = false;
 
     @FXML
     private Canvas canvas;
@@ -24,6 +31,12 @@ public class Controller {
     @FXML
     private CheckBox spline;
 
+    @FXML
+    private Slider tangent_slider;
+
+    @FXML
+    private Text tangent_text;
+
     public CanvasRenderer canvasRenderer;
 
     public void changeCheckBoxes() {
@@ -33,6 +46,8 @@ public class Controller {
     }
 
     public void reset() {
+        curveIsAvailable = false;
+        path = null;
         drawnCurve.clear();
         RDPCurve.clear();
     }
@@ -48,11 +63,28 @@ public class Controller {
         RDPCurve.add(start);
         RDP.generateSimplifiedCurve(0, total - 1, drawnCurve, RDPCurve);
         RDPCurve.add(end);
+        curveIsAvailable = true;
+    }
+
+    public void spline() {
+        if (!curveIsAvailable) return;
+
+        // Create a new path based on the simplified curve
+        path = new Path(RDPCurve);
     }
 
     @FXML
     void initialize() {
         drawEvents(canvas);
+
+        tangent_text.setText("0.5");
+        tangent_slider.adjustValue(0.5);
+
+        tangent_slider.valueProperty().addListener((observableValue, number, t1) -> {
+            Path.TANGENT_COEFFICIENT = tangent_slider.getValue();
+            tangent_text.setText(String.format("%.2f", tangent_slider.getValue()));
+            spline();
+        });
 
         original.setSelected(true);
         simplified.setSelected(true);
