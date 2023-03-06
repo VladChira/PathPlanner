@@ -13,8 +13,8 @@ public class CanvasRenderer extends AnimationTimer {
     public Canvas canvas;
     public GraphicsContext gc;
 
-    public static Vector2D point = new Vector2D();
-    public static double slope = 0.0;
+    public static Vector2D pointA = new Vector2D();
+    public static Vector2D pointB = new Vector2D();
 
     public CanvasRenderer(Canvas canvas) {
         this.canvas = canvas;
@@ -65,20 +65,14 @@ public class CanvasRenderer extends AnimationTimer {
             }
             gc.stroke();
             gc.closePath();
+
+            gc.setStroke(Color.CRIMSON);
+            gc.beginPath();
+            gc.strokeLine(FieldUtils.CMToCanvasUnits(pointA.x), FieldUtils.CMToCanvasUnits(pointA.y), FieldUtils.CMToCanvasUnits(pointB.x), FieldUtils.CMToCanvasUnits(pointB.y));
+            gc.closePath();
         }
 
         //drawLine();
 
-    }
-
-    public void drawLine() {
-        // y0 = mx0 + b => b = y0 - mx0
-        double b = point.y - slope * point.x;
-        System.out.println(b);
-        double y1 = slope * 10000 + b;
-        double y2 = slope * -10000 + b;
-        gc.beginPath();
-        gc.strokeLine(10000, y1, -10000, y2);
-        gc.closePath();
     }
 }

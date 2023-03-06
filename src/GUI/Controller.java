@@ -102,7 +102,6 @@ public class Controller {
                                 FieldUtils.canvasUnitsToCM(event.getY())));
                         drawnCurve.add(new Vector2D(FieldUtils.canvasUnitsToCM(event.getX() + 0.01),
                                 FieldUtils.canvasUnitsToCM(event.getY() + 0.01))); // terrible hack
-                        //System.out.println(event.getX() + " " + event.getY());
                     }
                 });
 
@@ -111,7 +110,6 @@ public class Controller {
                     if (event.getX() <= 700 && CanvasRenderer.drawOriginalCurve) {
                         drawnCurve.add(new Vector2D(FieldUtils.canvasUnitsToCM(event.getX()),
                                 FieldUtils.canvasUnitsToCM(event.getY())));
-                        //System.out.println(event.getX() + " " + event.getY());
                     }
                 });
     }

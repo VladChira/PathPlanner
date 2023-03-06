@@ -11,10 +11,10 @@ import java.util.ArrayList;
 
 public class Path {
 
-    public static double TANGENT_COEFFICIENT = 0.8;
+    public static double TANGENT_COEFFICIENT = 0.5;
 
-    ArrayList<Segment> segments;
-    double totalDisplacement = 0;
+    private ArrayList<Segment> segments;
+    private double totalDisplacement = 0;
 
     public Path() {
         segments = new ArrayList<>();
@@ -23,15 +23,6 @@ public class Path {
     public Path(ArrayList<Vector2D> points) {
         segments = new ArrayList<>();
         if (points.size() == 0) return;
-
-//        Segment a = new Segment();
-//        a.calculateXCoeffs(points.get(0).x, 0.0, 0.0, points.get(1).x, 0.0, 0.0); // TODO First & Second order derivatives?
-//        a.calculateYCoeffs(points.get(0).y, 0.0, 0.0, points.get(1).y, 0.0, 0.0);
-//        double len = a.getLength();
-//        a.startLen = totalDisplacement;
-//        a.endLen = totalDisplacement + len;
-//        addSegment(a);
-//        totalDisplacement += len;
 
         for (int i = 0; i < points.size() - 1; i++) {
             Vector2D currentPoint = points.get(i);
@@ -42,13 +33,9 @@ public class Path {
             }
 
             // Compute the end tangent based on these three points.
-            Vector2D computedTangent = null;
+            Vector2D computedTangent;
             if (nextNextPoint != null) {
                 computedTangent = firstDerivativeHeuristic(currentPoint, nextPoint, nextNextPoint);
-//                System.out.println(currentPoint.x + " " + currentPoint.y);
-//                System.out.println(nextPoint.x + " " + nextPoint.y);
-//                System.out.println(nextNextPoint.x + " " + nextNextPoint.y);
-                //System.out.println(computedTangent.x + " " + computedTangent.y);
             } else computedTangent = new Vector2D(0.0, 0.0);
 
             Segment prevSegment = new Segment();
@@ -70,19 +57,28 @@ public class Path {
             a.endLen = totalDisplacement + len;
             addSegment(a);
             totalDisplacement += len;
-
-            //if (i == 2) {
-            //  println(t + " " + a.getSlopeAt(0.999) + " " + a.x.getFirstDerivative().eval(0.999) + " " + a.y.getFirstDerivative().eval(0.999));
-            //}
         }
     }
 
     private Vector2D firstDerivativeHeuristic(Vector2D A, Vector2D B, Vector2D C) {
         double slopeOfPerpendicularToBisector = -1 / Utilities.getSlopeOfAngleBisector(A, B, C);
-        System.out.println(slopeOfPerpendicularToBisector);
         double magnitude = TANGENT_COEFFICIENT * Math.min(Vector2D.dist(B, A), Vector2D.dist(B, C));
+
+        // Orient the tangent vector towards the third point. So dumb it actually works
+        double b = -slopeOfPerpendicularToBisector * B.x + B.y;
+
+        Vector2D u = (new Vector2D(0, b).sub(B)).normalize();
+
+        Vector2D truePoint = B.copy().add(u.copy().mult(magnitude));
+        Vector2D truePointReflected = B.copy().sub(u.copy().mult(magnitude));
+
         Vector2D directionVector = new Vector2D(1, slopeOfPerpendicularToBisector).normalize();
-        Vector2D point = directionVector.mult(magnitude);
+
+        Vector2D point = directionVector.copy().mult(magnitude);
+        Vector2D pointReflected = directionVector.copy().mult(-magnitude);
+
+        if (Vector2D.dist(C, truePoint) < Vector2D.dist(C, truePointReflected)) point = pointReflected.copy();
+
         double alpha = Math.atan2(point.y, point.x);
         return new Vector2D(magnitude * Math.cos(alpha), magnitude * Math.sin(alpha));
     }
