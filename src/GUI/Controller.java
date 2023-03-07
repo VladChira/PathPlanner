@@ -43,7 +43,7 @@ public class Controller {
     private Text tangent_text;
 
     @FXML
-    private LineChart<String, Number> chart;
+    private LineChart<Number, Number> chart;
 
     @FXML
     ChoiceBox<String> profileChoiceBox;
@@ -94,15 +94,57 @@ public class Controller {
         fieldImage.setVisible(fieldIsShown);
     }
 
+    public void generateProfile() {
+        if (path == null) return;
+        // temporary
+        ArrayList<Vector2D> position = new ArrayList<>();
+        for (double s = 2; s <= path.getTotalDisplacement() - 2; s += 1) {
+            double c = path.getCurvaturePointAtDisplacement(s);
+            position.add(new Vector2D(s, c));
+        }
+
+        addProfilesToChart(position, null, null);
+    }
+
+    public void addProfilesToChart(ArrayList<Vector2D> position, ArrayList<Vector2D> velocity, ArrayList<Vector2D> acceleration) {
+        chart.getData().clear();
+        if (position != null) {
+            XYChart.Series<Number, Number> series = new XYChart.Series<>();
+
+            for (Vector2D v : position)
+                series.getData().add(new XYChart.Data<>(v.x, v.y));
+
+            chart.getData().add(series);
+        }
+        if (velocity != null) {
+            XYChart.Series<Number, Number> series = new XYChart.Series<>();
+
+            for (Vector2D v : velocity)
+                series.getData().add(new XYChart.Data<>(v.x, v.y));
+
+            chart.getData().add(series);
+        }
+
+        if (acceleration != null) {
+            XYChart.Series<Number, Number> series = new XYChart.Series<>();
+
+            for (Vector2D v : acceleration)
+                series.getData().add(new XYChart.Data<>(v.x, v.y));
+
+            chart.getData().add(series);
+        }
+    }
+
     @FXML
     void initialize() {
         fieldImage.setVisible(fieldIsShown);
         showField.setSelected(fieldIsShown);
 
-        profileChoiceBox.getItems().add("Position Profile");
-        profileChoiceBox.getItems().add("Velocity Profile");
-        profileChoiceBox.getItems().add("Acceleration Profile");
-        profileChoiceBox.setValue("Velocity Profile");
+        profileChoiceBox.getItems().add("Path Curvature");
+        profileChoiceBox.getItems().add("Position Profile - WIP");
+        profileChoiceBox.getItems().add("Velocity Profile - WIP");
+        profileChoiceBox.getItems().add("Acceleration Profile - WIP");
+        profileChoiceBox.setValue("Path Curvature");
 
         drawEvents(canvas);
 
@@ -119,19 +161,14 @@ public class Controller {
         simplified.setSelected(true);
         spline.setSelected(true);
 
-
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-
-        for (double i = 0; i <= 10; i+=0.2)
-            series.getData().add(new XYChart.Data<>(String.format("%.2f",i), Math.sqrt(i)));
-
-        chart.getData().add(series);
+        chart.setAnimated(false);
         chart.setCreateSymbols(false);
-
+        chart.setAxisSortingPolicy(LineChart.SortingPolicy.NONE);
 
         canvasRenderer = new CanvasRenderer(canvas);
         canvasRenderer.start();
     }
+
 
     private void drawEvents(Canvas canvas) {
         canvas.addEventHandler(MouseEvent.MOUSE_PRESSED,

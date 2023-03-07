@@ -1,7 +1,5 @@
 package core;
 
-import GUI.CanvasRenderer;
-
 import java.util.ArrayList;
 
 /**
@@ -83,6 +81,16 @@ public class Path {
         return new Vector2D(magnitude * Math.cos(alpha), magnitude * Math.sin(alpha));
     }
 
+    private Vector2D secondDerivativeHeuristic(Vector2D A, Vector2D B, Vector2D C) {
+        return null;
+    }
+
+    public double getCurvaturePointAtDisplacement(double displacement) {
+        Vector2D deriv = getFirstDerivativePointAtDisplacement(displacement);
+        Vector2D doubleDeriv = getSecondDerivativePointAtDisplacement(displacement);
+        return Vector2D.absCross(deriv, doubleDeriv) / Math.pow(deriv.mag(), 3);
+    }
+
     public Vector2D getFirstDerivativePointAtDisplacement(double displacement) {
         for (Segment s : segments) {
             if (displacement >= s.startLen && displacement <= s.endLen) {
@@ -123,6 +131,7 @@ public class Path {
                 return s.getPointAt(t);
             }
         }
+
         return null;
     }
 

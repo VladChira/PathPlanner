@@ -78,6 +78,11 @@ public class Vector2D implements Serializable {
         return this;
     }
 
+    public static double absCross(Vector2D a, Vector2D b) {
+        return a.x * b.y - b.x * a.y;
+    }
+
+
     public static double dist(final Vector2D v1, final Vector2D v2) {
         final double dx = v1.x - v2.x;
         final double dy = v1.y - v2.y;

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
@@ -69,13 +68,13 @@
       </Text>
       <LineChart fx:id="chart" layoutX="691.0" layoutY="327.0" prefHeight="374.0" prefWidth="493.0">
         <xAxis>
-          <CategoryAxis side="BOTTOM" />
+          <NumberAxis side="BOTTOM" />
         </xAxis>
         <yAxis>
           <NumberAxis side="LEFT" />
         </yAxis>
       </LineChart>
-      <Button fx:id="generateProfileButton" layoutX="734.0" layoutY="291.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="215.0" text="Generate Profile">
+      <Button fx:id="generateProfileButton" layoutX="734.0" layoutY="291.0" mnemonicParsing="false" onAction="#generateProfile" prefHeight="35.0" prefWidth="215.0" text="Generate Profile">
          <font>
             <Font name="Arial" size="15.0" />
          </font>

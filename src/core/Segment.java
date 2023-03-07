@@ -35,7 +35,7 @@ public class Segment {
     return integrate(xDeriv, yDeriv, 0, t);
   }
   
-  public double getSlopeAt(double t) {
+  public double getTangentAt(double t) {
     return getFirstDerivativePointAt(t).y / getFirstDerivativePointAt(t).x;
   }
   
