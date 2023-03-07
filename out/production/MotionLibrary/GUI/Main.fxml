@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.image.Image?>
@@ -14,55 +18,73 @@
 <AnchorPane id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #121212;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controller">
    <children>
       <Separator layoutX="697.0" layoutY="2.0" orientation="VERTICAL" prefHeight="700.0" prefWidth="8.0" style="-fx-background-color: white;" />
-      <Text fill="WHITE" layoutX="743.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Vlad's Path Planner">
+      <Text fill="WHITE" layoutX="743.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Vlad's Path Planner">
          <font>
             <Font name="Arial Bold" size="45.0" />
          </font>
       </Text>
-      <ImageView fitHeight="700.0" fitWidth="700.0" layoutX="22.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ImageView fx:id="fieldImage" fitHeight="700.0" fitWidth="700.0" layoutX="22.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <image>
             <Image url="@../field.png" />
          </image>
       </ImageView>
       <Canvas id="mainCanvas" fx:id="canvas" height="700.0" width="700.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <CheckBox fx:id="original" layoutX="732.0" layoutY="131.0" mnemonicParsing="false" onAction="#changeCheckBoxes" text="Draw Original" textFill="WHITE">
+      <CheckBox fx:id="original" layoutX="732.0" layoutY="101.0" mnemonicParsing="false" onAction="#changeCheckBoxes" text="Draw Original" textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font></CheckBox>
-      <CheckBox fx:id="simplified" layoutX="890.0" layoutY="131.0" mnemonicParsing="false" onAction="#changeCheckBoxes" text="Draw Simplified" textFill="WHITE">
+      <CheckBox fx:id="simplified" layoutX="890.0" layoutY="101.0" mnemonicParsing="false" onAction="#changeCheckBoxes" text="Draw Simplified" textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font></CheckBox>
-      <CheckBox fx:id="spline" layoutX="1057.0" layoutY="131.0" mnemonicParsing="false" onAction="#changeCheckBoxes" text="Draw Spline" textFill="WHITE">
+      <CheckBox fx:id="spline" layoutX="1057.0" layoutY="101.0" mnemonicParsing="false" onAction="#changeCheckBoxes" text="Draw Spline" textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font></CheckBox>
-      <Button layoutX="724.0" layoutY="193.0" mnemonicParsing="false" onAction="#reset" prefHeight="47.0" prefWidth="135.0" text="Reset">
+      <Button layoutX="724.0" layoutY="134.0" mnemonicParsing="false" onAction="#reset" prefHeight="47.0" prefWidth="135.0" text="Reset">
          <font>
             <Font size="16.0" />
          </font></Button>
-      <Button layoutX="879.0" layoutY="193.0" mnemonicParsing="false" onAction="#simplify" prefHeight="47.0" prefWidth="135.0" text="Simplify">
+      <Button layoutX="879.0" layoutY="134.0" mnemonicParsing="false" onAction="#simplify" prefHeight="47.0" prefWidth="135.0" text="Simplify">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Button layoutX="1036.0" layoutY="193.0" mnemonicParsing="false" onAction="#spline" prefHeight="47.0" prefWidth="135.0" text="Spline" wrapText="true">
+      <Button layoutX="1036.0" layoutY="134.0" mnemonicParsing="false" onAction="#spline" prefHeight="47.0" prefWidth="135.0" text="Spline" wrapText="true">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Separator layoutX="949.0" layoutY="-136.0" minWidth="-Infinity" orientation="VERTICAL" prefHeight="500.0" prefWidth="3.0" rotate="90.0" style="-fx-background-color: white;" />
-      <Separator layoutX="952.0" layoutY="51.0" minWidth="-Infinity" orientation="VERTICAL" prefHeight="500.0" prefWidth="3.0" rotate="90.0" style="-fx-background-color: white;" />
-      <Slider fx:id="tangent_slider" blockIncrement="0.1" layoutX="913.0" layoutY="265.0" max="1.0" prefHeight="14.0" prefWidth="140.0" />
-      <Text fill="WHITE" layoutX="721.0" layoutY="278.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tangent Coefficient">
+      <Separator layoutX="952.0" layoutY="-15.0" minWidth="-Infinity" orientation="VERTICAL" prefHeight="500.0" prefWidth="3.0" rotate="90.0" style="-fx-background-color: white;" />
+      <Slider fx:id="tangent_slider" blockIncrement="0.1" layoutX="913.0" layoutY="201.0" max="1.0" prefHeight="14.0" prefWidth="140.0" />
+      <Text fill="WHITE" layoutX="721.0" layoutY="214.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tangent Coefficient">
          <font>
             <Font name="System Bold" size="19.0" />
          </font>
       </Text>
-      <Text fx:id="tangent_text" fill="WHITE" layoutX="1093.0" layoutY="277.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0.5">
+      <Text fx:id="tangent_text" fill="WHITE" layoutX="1093.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0.5">
          <font>
             <Font size="24.0" />
          </font>
       </Text>
+      <LineChart fx:id="chart" layoutX="691.0" layoutY="327.0" prefHeight="374.0" prefWidth="493.0">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </LineChart>
+      <Button fx:id="generateProfileButton" layoutX="734.0" layoutY="291.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="215.0" text="Generate Profile">
+         <font>
+            <Font name="Arial" size="15.0" />
+         </font>
+      </Button>
+      <ChoiceBox fx:id="profileChoiceBox" layoutX="968.0" layoutY="295.0" prefHeight="26.0" prefWidth="184.0" />
+      <CheckBox fx:id="showField" layoutX="732.0" layoutY="64.0" mnemonicParsing="false" onAction="#toggleField" text="Show Field" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </CheckBox>
    </children>
 </AnchorPane>

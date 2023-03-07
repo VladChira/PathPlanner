@@ -5,8 +5,9 @@ import Jama.Matrix;
 public class Segment {
 
   /**
-   A segment is made up of two parametrized quintic polynomials
-   **/
+   * A segment is made up of two parametrized quintic polynomials
+   * and a heading interpolator
+   */
 
   double startLen = 0, endLen = 0;
   double len = -1;

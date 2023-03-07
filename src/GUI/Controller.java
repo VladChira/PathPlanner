@@ -3,12 +3,14 @@ package GUI;
 import core.RDP;
 import core.Vector2D;
 import core.Path;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Slider;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
@@ -32,10 +34,23 @@ public class Controller {
     private CheckBox spline;
 
     @FXML
+    private CheckBox showField;
+
+    @FXML
     private Slider tangent_slider;
 
     @FXML
     private Text tangent_text;
+
+    @FXML
+    private LineChart<String, Number> chart;
+
+    @FXML
+    ChoiceBox<String> profileChoiceBox;
+
+    private boolean fieldIsShown = true;
+    @FXML
+    private ImageView fieldImage;
 
     public CanvasRenderer canvasRenderer;
 
@@ -73,8 +88,22 @@ public class Controller {
         path = new Path(RDPCurve);
     }
 
+    public void toggleField() {
+        showField.setSelected(!fieldIsShown);
+        fieldIsShown = !fieldIsShown;
+        fieldImage.setVisible(fieldIsShown);
+    }
+
     @FXML
     void initialize() {
+        fieldImage.setVisible(fieldIsShown);
+        showField.setSelected(fieldIsShown);
+
+        profileChoiceBox.getItems().add("Position Profile");
+        profileChoiceBox.getItems().add("Velocity Profile");
+        profileChoiceBox.getItems().add("Acceleration Profile");
+        profileChoiceBox.setValue("Velocity Profile");
+
         drawEvents(canvas);
 
         tangent_text.setText("0.5");
@@ -89,6 +118,16 @@ public class Controller {
         original.setSelected(true);
         simplified.setSelected(true);
         spline.setSelected(true);
+
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+
+        for (double i = 0; i <= 10; i+=0.2)
+            series.getData().add(new XYChart.Data<>(String.format("%.2f",i), Math.sqrt(i)));
+
+        chart.getData().add(series);
+        chart.setCreateSymbols(false);
+
 
         canvasRenderer = new CanvasRenderer(canvas);
         canvasRenderer.start();

@@ -71,8 +71,5 @@ public class CanvasRenderer extends AnimationTimer {
             gc.strokeLine(FieldUtils.CMToCanvasUnits(pointA.x), FieldUtils.CMToCanvasUnits(pointA.y), FieldUtils.CMToCanvasUnits(pointB.x), FieldUtils.CMToCanvasUnits(pointB.y));
             gc.closePath();
         }
-
-        //drawLine();
-
     }
 }
